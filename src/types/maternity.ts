@@ -1,39 +1,39 @@
-export interface MaternityPolicy {
-  id: string;
-  name: string;
-  smpRules: SMPRules;
-  companyRules: CompanyRules[];
-}
-
-export interface SMPRules {
-  standardRate: number; // e.g., 184.03
-  lowerEarningsLimit: number; // e.g., 123
-  higherRatePercentage: number; // e.g., 90
-  higherRateWeeks: number; // e.g., 6
-  standardRateWeeks: number; // e.g., 33
-}
-
-export interface CompanyRules {
-  weeks: number;
-  percentage: number; // 0 to 100
-  inclusiveOfSMP: boolean;
-}
-
 export interface SalaryData {
-  monthlyPreTax: number;
-  leaveStartDate: string; // ISO date
+  averageMonthlyTakeHomePay: number
+  averageMonthlyCommittedSpending: number
+  leaveStartDate: string
 }
 
 export interface CalculationResult {
-  monthlyBreakdown: MonthlyPayment[];
-  totalPay: number;
-  smpTotal: number;
-  companyTotal: number;
+  monthlyBreakdown: MonthlyPayment[]
+  weeklyBreakdown: WeeklyPayment[]
+  totalPay: number
+  smpFloorTotal: number
+  enhancedPayTotal: number
+  totalShortfall: number
+  normalWeeklyTakeHome: number
+  normalMonthlyTakeHome: number
 }
 
 export interface MonthlyPayment {
-  month: string; // e.g., "January 2026"
-  preTaxAmount: number;
-  smpAmount: number;
-  companyAmount: number;
+  month: string
+  takeHomeAmount: number
+  enhancedAmount: number
+  smpFloorAmount: number
+  moneyLeftOver: number
+  shortfallAmount: number
+  leaveDayCount: number
+  averageDailyPay: number
+  dominantRate: number
+  rates: number[]
+}
+
+export interface WeeklyPayment {
+  weekNumber: number
+  weekStartDate: string
+  rate: number
+  enhancedAmount: number
+  smpFloorAmount: number
+  takeHomeAmount: number
+  smpFloorApplied: boolean
 }

@@ -1,53 +1,66 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { useMaternityStore } from './useMaternityStore'
 
 describe('useMaternityStore', () => {
   beforeEach(() => {
-    // Reset store state if needed (Zustand persists state in memory during tests)
+    window.localStorage.clear()
     useMaternityStore.setState({
-      salaryData: { monthlyPreTax: 0, leaveStartDate: new Date().toISOString() },
-      calculationResult: null
+      salaryData: {
+        averageMonthlyTakeHomePay: 0,
+        averageMonthlyCommittedSpending: 0,
+        leaveStartDate: '2026-06-01',
+      },
+      calculationResult: null,
     })
   })
 
-  it('should initialize with default values', () => {
+  it('initializes with the test reset values', () => {
     const state = useMaternityStore.getState()
-    expect(state.salaryData.monthlyPreTax).toBe(0)
+
+    expect(state.salaryData.averageMonthlyTakeHomePay).toBe(0)
     expect(state.calculationResult).toBeNull()
   })
 
-  it('should update salary data and trigger calculation', () => {
+  it('updates salary data, persists it, and triggers calculation', () => {
     const { setSalaryData } = useMaternityStore.getState()
-    
-    setSalaryData({ monthlyPreTax: 4000, leaveStartDate: '2026-06-01' })
-    
+
+    setSalaryData({
+      averageMonthlyTakeHomePay: 4333.333333333333,
+      averageMonthlyCommittedSpending: 2500,
+      leaveStartDate: '2026-06-01',
+    })
+
     const state = useMaternityStore.getState()
-    expect(state.salaryData.monthlyPreTax).toBe(4000)
-    expect(state.calculationResult).not.toBeNull()
+    expect(state.salaryData.averageMonthlyTakeHomePay).toBeCloseTo(4333.33, 2)
+    expect(state.salaryData.averageMonthlyCommittedSpending).toBe(2500)
     expect(state.calculationResult?.totalPay).toBeGreaterThan(0)
+    expect(state.calculationResult?.totalShortfall).toBeGreaterThanOrEqual(0)
+    expect(state.calculationResult?.monthlyBreakdown).toHaveLength(12)
+    expect(window.localStorage.getItem('maternity-pay-calculator')).toContain(
+      'averageMonthlyTakeHomePay',
+    )
   })
 
-  it('should update policy and trigger calculation', () => {
-    const { setPolicy, setSalaryData } = useMaternityStore.getState()
-    
-    setSalaryData({ monthlyPreTax: 4000, leaveStartDate: '2026-06-01' })
-    
-    const initialResult = useMaternityStore.getState().calculationResult
-    
-    setPolicy({
-      id: 'custom',
-      name: 'Custom',
-      smpRules: {
-        standardRate: 200, // Higher than default
-        lowerEarningsLimit: 123,
-        higherRatePercentage: 90,
-        higherRateWeeks: 6,
-        standardRateWeeks: 33,
-      },
-      companyRules: []
+  it('clears the result when salary is not positive', () => {
+    const { setSalaryData } = useMaternityStore.getState()
+
+    setSalaryData({
+      averageMonthlyTakeHomePay: 0,
+      averageMonthlyCommittedSpending: 2500,
+      leaveStartDate: '2026-06-01',
     })
-    
-    const updatedResult = useMaternityStore.getState().calculationResult
-    expect(updatedResult?.totalPay).not.toBe(initialResult?.totalPay)
+
+    expect(useMaternityStore.getState().calculationResult).toBeNull()
+  })
+
+  it('resets to a useful default calculation', () => {
+    const { reset } = useMaternityStore.getState()
+
+    reset()
+
+    const state = useMaternityStore.getState()
+    expect(state.salaryData.averageMonthlyTakeHomePay).toBe(3500)
+    expect(state.salaryData.averageMonthlyCommittedSpending).toBe(2500)
+    expect(state.calculationResult?.weeklyBreakdown).toHaveLength(52)
   })
 })
