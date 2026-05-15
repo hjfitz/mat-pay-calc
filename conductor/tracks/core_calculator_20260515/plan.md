@@ -19,7 +19,7 @@
     - [x] [x] Write failing tests (Red Phase)
     - [x] [x] Implement to pass tests (Green Phase)
     - [x] [x] Refactor and verify coverage
-- [ ] Task: Integrate calculation engine with Zustand state management
+- [~] Task: Integrate calculation engine with Zustand state management
     - [ ] [ ] Write failing tests (Red Phase)
     - [ ] [ ] Implement to pass tests (Green Phase)
     - [ ] [ ] Refactor and verify coverage
