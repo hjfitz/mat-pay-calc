@@ -13,7 +13,7 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Project Scaffolding & Setup' (Protocol in workflow.md)
 
 ## Phase 2: Core Calculation Logic
-- [ ] Task: Define the calculation ruleset and types
+- [~] Task: Define the calculation ruleset and types
     - [ ] [ ] Create TypeScript interfaces for policy and salary data
 - [ ] Task: Implement maternity pay calculation engine
     - [ ] [ ] Write failing tests (Red Phase)
