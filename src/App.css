@@ -189,6 +189,40 @@ input:focus {
   margin-bottom: 0;
 }
 
+.chart-key {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px 14px;
+  color: #55727a;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.chart-key span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chart-key i {
+  width: 18px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+.key-pay {
+  background: #0d8f9b;
+}
+
+.key-leftover {
+  background: #3f9f79;
+}
+
+.key-shortfall {
+  background: #c96772;
+}
+
 .table-actions {
   display: flex;
   min-height: 40px;
@@ -206,15 +240,15 @@ input:focus {
 .timeline-chart {
   display: grid;
   grid-template-columns: repeat(12, minmax(38px, 1fr));
-  gap: 10px;
-  min-height: 280px;
+  gap: 12px;
+  min-height: 330px;
   align-items: end;
 }
 
 .bar-column {
   display: grid;
-  grid-template-rows: 220px auto;
-  gap: 10px;
+  grid-template-rows: 220px 52px auto;
+  gap: 8px;
   min-width: 0;
 }
 
@@ -258,6 +292,55 @@ input:focus {
   font-weight: 800;
   text-align: center;
   text-overflow: ellipsis;
+}
+
+.balance-track {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #f3f7f8;
+}
+
+.balance-fill {
+  position: relative;
+  width: 100%;
+  height: var(--balance-size);
+  min-height: 18px;
+  border-radius: 6px 6px 0 0;
+  transition:
+    height 180ms ease,
+    width 180ms ease;
+}
+
+.is-leftover {
+  align-items: end;
+}
+
+.is-shortfall {
+  align-items: start;
+}
+
+.is-leftover .balance-fill {
+  background: #3f9f79;
+}
+
+.is-shortfall .balance-fill {
+  background: #c96772;
+}
+
+.balance-fill span {
+  position: absolute;
+  right: 50%;
+  top: 50%;
+  transform: translate(50%, -50%);
+  color: #ffffff;
+  font-size: 0.66rem;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(45, 64, 68, 0.42);
+  white-space: nowrap;
 }
 
 .breakdown-table {
@@ -345,6 +428,10 @@ input:focus {
     display: grid;
   }
 
+  .chart-key {
+    justify-content: flex-start;
+  }
+
   .timeline-chart {
     display: grid;
     grid-template-columns: 1fr;
@@ -356,7 +443,7 @@ input:focus {
 
   .bar-column {
     grid-template-columns: 44px minmax(0, 1fr);
-    grid-template-rows: 34px;
+    grid-template-rows: 34px 24px;
     gap: 10px;
     width: 100%;
     align-items: center;
@@ -384,6 +471,27 @@ input:focus {
 
   .bar-fill span {
     top: 50%;
+    right: auto;
+    left: 8px;
+    transform: translateY(-50%);
+  }
+
+  .balance-track {
+    grid-column: 2;
+    height: 24px;
+    min-height: 24px;
+    align-items: stretch;
+  }
+
+  .balance-fill {
+    width: var(--balance-size);
+    height: 100%;
+    min-width: 58px;
+    min-height: 0;
+    border-radius: 6px;
+  }
+
+  .balance-fill span {
     right: auto;
     left: 8px;
     transform: translateY(-50%);

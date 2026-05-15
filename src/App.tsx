@@ -78,6 +78,9 @@ function App() {
   const maxMonthlyPay = Math.max(
     ...(calculationResult?.monthlyBreakdown.map((month) => month.takeHomeAmount) ?? [0]),
   )
+  const maxMonthlyBalance = Math.max(
+    ...(calculationResult?.monthlyBreakdown.map((month) => Math.abs(month.moneyLeftOver)) ?? [0]),
+  )
 
   async function copyCsv() {
     if (!calculationResult) return
@@ -216,7 +219,20 @@ function App() {
                 <p className="eyebrow">12 month view</p>
                 <h2 id="chart-title">Payment timeline</h2>
               </div>
-              <p>Estimated pay after your usual deductions.</p>
+              <div className="chart-key" aria-label="Chart legend">
+                <span>
+                  <i className="key-pay" aria-hidden="true"></i>
+                  Take-home pay
+                </span>
+                <span>
+                  <i className="key-leftover" aria-hidden="true"></i>
+                  Left over
+                </span>
+                <span>
+                  <i className="key-shortfall" aria-hidden="true"></i>
+                  Shortfall
+                </span>
+              </div>
             </div>
 
             <div className="timeline-chart" role="list" aria-label="Monthly take-home pay chart">
@@ -230,6 +246,22 @@ function App() {
                       } as CSSProperties}
                     >
                       <span>{formatCurrency(month.takeHomeAmount)}</span>
+                    </div>
+                  </div>
+                  <div
+                    className={`balance-track ${month.moneyLeftOver < 0 ? 'is-shortfall' : 'is-leftover'}`}
+                    aria-label={`${month.month} ${month.moneyLeftOver < 0 ? 'shortfall' : 'left over'} ${formatPreciseCurrency(Math.abs(month.moneyLeftOver))}`}
+                  >
+                    <div
+                      className="balance-fill"
+                      style={{
+                        '--balance-size': `${maxMonthlyBalance > 0 ? (Math.abs(month.moneyLeftOver) / maxMonthlyBalance) * 100 : 0}%`,
+                      } as CSSProperties}
+                    >
+                      <span>
+                        {month.moneyLeftOver < 0 ? '-' : '+'}
+                        {formatCurrency(Math.abs(month.moneyLeftOver))}
+                      </span>
                     </div>
                   </div>
                   <span className="bar-label">{month.month.slice(0, 3)}</span>

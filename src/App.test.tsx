@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, expect, test, vi } from 'vitest'
 import App from './App'
@@ -29,6 +29,10 @@ test('renders the maternity pay dashboard', () => {
   expect(screen.getByText(/tax bands, ni rates, student loans/i)).toBeInTheDocument()
   expect(screen.getByRole('heading', { name: /assumptions and privacy/i })).toBeInTheDocument()
   expect(screen.getByText(/not sent to a server/i)).toBeInTheDocument()
+  const legend = screen.getByLabelText(/chart legend/i)
+  expect(legend).toBeInTheDocument()
+  expect(within(legend).getByText(/shortfall/i)).toBeInTheDocument()
+  expect(screen.getByLabelText(/august 2026 left over/i)).toBeInTheDocument()
   expect(screen.getByRole('table', { name: /monthly payment breakdown/i })).toBeInTheDocument()
 })
 
