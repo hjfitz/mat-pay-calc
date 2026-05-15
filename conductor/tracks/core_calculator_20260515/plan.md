@@ -15,7 +15,7 @@
 ## Phase 2: Core Calculation Logic
 - [x] Task: Define the calculation ruleset and types [82b2788]
     - [x] [x] Create TypeScript interfaces for policy and salary data
-- [ ] Task: Implement maternity pay calculation engine
+- [~] Task: Implement maternity pay calculation engine
     - [ ] [ ] Write failing tests (Red Phase)
     - [ ] [ ] Implement to pass tests (Green Phase)
     - [ ] [ ] Refactor and verify coverage
