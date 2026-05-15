@@ -1,7 +1,7 @@
 # Implementation Plan - Build core maternity pay calculator functionality
 
 ## Phase 1: Project Scaffolding & Setup
-- [ ] Task: Initialize React PWA with Vite and TypeScript
+- [~] Task: Initialize React PWA with Vite and TypeScript
     - [ ] [ ] Scaffolding with Vite
     - [ ] [ ] Configure PWA plugin
 - [ ] Task: Configure Tailwind CSS and project structure

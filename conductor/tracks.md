@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Build core maternity pay calculator functionality**
+- [~] **Track: Build core maternity pay calculator functionality**
   *Link: [./tracks/core_calculator_20260515/](./tracks/core_calculator_20260515/)*
