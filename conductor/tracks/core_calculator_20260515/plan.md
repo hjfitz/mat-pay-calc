@@ -19,10 +19,10 @@
     - [x] [x] Write failing tests (Red Phase)
     - [x] [x] Implement to pass tests (Green Phase)
     - [x] [x] Refactor and verify coverage
-- [~] Task: Integrate calculation engine with Zustand state management
-    - [ ] [ ] Write failing tests (Red Phase)
-    - [ ] [ ] Implement to pass tests (Green Phase)
-    - [ ] [ ] Refactor and verify coverage
+- [x] Task: Integrate calculation engine with Zustand state management [33fffc6]
+    - [x] [x] Write failing tests (Red Phase)
+    - [x] [x] Implement to pass tests (Green Phase)
+    - [x] [x] Refactor and verify coverage
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Core Calculation Logic' (Protocol in workflow.md)
 
 ## Phase 3: Dashboard UI & Visualization
