@@ -7,7 +7,7 @@
 - [x] Task: Configure Tailwind CSS and project structure [38fb490]
     - [x] [x] Install and initialize Tailwind
     - [x] [x] Define folder structure (components, hooks, store, utils)
-- [ ] Task: Setup testing environment (Vitest, React Testing Library)
+- [~] Task: Setup testing environment (Vitest, React Testing Library)
     - [ ] [ ] Install Vitest and RTL
     - [ ] [ ] Configure test scripts and coverage reporting
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Project Scaffolding & Setup' (Protocol in workflow.md)
