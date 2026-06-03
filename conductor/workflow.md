@@ -66,6 +66,12 @@ All tasks follow a strict lifecycle:
     - **Action:** Stage the modified `plan.md` file.
     - **Action:** Commit this change with a descriptive message (e.g., `conductor(plan): Mark task 'Create user model' as complete`).
 
+12. **Post-Verification Publish:**
+    - After tests/build/lint and any requested manual verification are complete, commit all intended task changes.
+    - Push the current branch to its tracked GitHub remote before reporting the task as finished.
+    - The final response must include the commit hash, branch name, push result, and working-tree status.
+    - If pushing is blocked by authentication, network access, or remote configuration, report the blocker explicitly and leave the local commit intact.
+
 ### Phase Completion Verification and Checkpointing Protocol
 
 **Trigger:** This protocol is executed immediately after a task is completed that also concludes a phase in `plan.md`.
@@ -134,6 +140,8 @@ All tasks follow a strict lifecycle:
 
 10.  **Announce Completion:** Inform the user that the phase is complete and the checkpoint has been created, with the detailed verification report attached as a git note.
 
+11.  **Push Phase Completion:** Push the checkpoint and plan-update commits to the tracked GitHub remote branch. If the push is blocked, report the exact blocker and the local commit hashes that still need pushing.
+
 ### Quality Gates
 
 Before marking any task complete, verify:
@@ -147,6 +155,7 @@ Before marking any task complete, verify:
 - [ ] Works correctly on mobile (if applicable)
 - [ ] Documentation updated if needed
 - [ ] No security vulnerabilities introduced
+- [ ] Verified changes are committed and pushed to the tracked GitHub remote
 
 ## Development Commands
 
