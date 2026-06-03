@@ -8,6 +8,7 @@ describe('useMaternityStore', () => {
       salaryData: {
         averageMonthlyTakeHomePay: 0,
         averageMonthlyCommittedSpending: 0,
+        contingencyBufferPercent: 0,
         leaveStartDate: '2026-06-01',
       },
       calculationResult: null,
@@ -27,12 +28,14 @@ describe('useMaternityStore', () => {
     setSalaryData({
       averageMonthlyTakeHomePay: 4333.333333333333,
       averageMonthlyCommittedSpending: 2500,
+      contingencyBufferPercent: 10,
       leaveStartDate: '2026-06-01',
     })
 
     const state = useMaternityStore.getState()
     expect(state.salaryData.averageMonthlyTakeHomePay).toBeCloseTo(4333.33, 2)
     expect(state.salaryData.averageMonthlyCommittedSpending).toBe(2500)
+    expect(state.salaryData.contingencyBufferPercent).toBe(10)
     expect(state.calculationResult?.totalPay).toBeGreaterThan(0)
     expect(state.calculationResult?.totalShortfall).toBeGreaterThanOrEqual(0)
     expect(state.calculationResult?.monthlyBreakdown).toHaveLength(12)
@@ -47,6 +50,7 @@ describe('useMaternityStore', () => {
     setSalaryData({
       averageMonthlyTakeHomePay: 0,
       averageMonthlyCommittedSpending: 2500,
+      contingencyBufferPercent: 10,
       leaveStartDate: '2026-06-01',
     })
 
@@ -61,6 +65,7 @@ describe('useMaternityStore', () => {
     const state = useMaternityStore.getState()
     expect(state.salaryData.averageMonthlyTakeHomePay).toBe(3500)
     expect(state.salaryData.averageMonthlyCommittedSpending).toBe(2500)
+    expect(state.salaryData.contingencyBufferPercent).toBe(10)
     expect(state.calculationResult?.weeklyBreakdown).toHaveLength(52)
   })
 })

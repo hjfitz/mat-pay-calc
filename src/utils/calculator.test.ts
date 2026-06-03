@@ -6,6 +6,7 @@ describe('calculateMaternityPay', () => {
   const salary: SalaryData = {
     averageMonthlyTakeHomePay: 4333.333333333333,
     averageMonthlyCommittedSpending: 2500,
+    contingencyBufferPercent: 10,
     leaveStartDate: '2026-06-01',
   }
 
@@ -35,6 +36,7 @@ describe('calculateMaternityPay', () => {
     const lowSalary = calculateMaternityPay({
       averageMonthlyTakeHomePay: 1000,
       averageMonthlyCommittedSpending: 900,
+      contingencyBufferPercent: 10,
       leaveStartDate: '2026-06-01',
     })
 
@@ -56,6 +58,17 @@ describe('calculateMaternityPay', () => {
     expect(october?.takeHomeAmount).toBeCloseTo(2600, 2)
   })
 
+  it('prorates salaried crossover months by calendar day across policy rates', () => {
+    const result = calculateMaternityPay(salary)
+    const july = result.monthlyBreakdown.find((month) => month.month === 'July 2026')
+
+    expect(july?.rates).toEqual([1, 0.6])
+    expect(july?.takeHomeAmount).toBeCloseTo(
+      (4333.333333333333 / 31) * (12 * 1 + 19 * 0.6),
+      2,
+    )
+  })
+
   it('totals the salaried monthly breakdown for a salary above the SMP floor', () => {
     const result = calculateMaternityPay(salary)
     const monthlyTotal = result.monthlyBreakdown.reduce((acc, month) => acc + month.takeHomeAmount, 0)
@@ -69,6 +82,7 @@ describe('calculateMaternityPay', () => {
     const result = calculateMaternityPay({
       averageMonthlyTakeHomePay: 3000,
       averageMonthlyCommittedSpending: 2500,
+      contingencyBufferPercent: 10,
       leaveStartDate: '2026-06-01',
     })
     const fullSixtyPercentMonth = result.monthlyBreakdown.find(
@@ -76,8 +90,11 @@ describe('calculateMaternityPay', () => {
     )
 
     expect(fullSixtyPercentMonth?.takeHomeAmount).toBeCloseTo(1800, 2)
-    expect(fullSixtyPercentMonth?.moneyLeftOver).toBeCloseTo(-700, 2)
-    expect(fullSixtyPercentMonth?.shortfallAmount).toBeCloseTo(700, 2)
+    expect(fullSixtyPercentMonth?.planningTargetAmount).toBeCloseTo(2750, 2)
+    expect(fullSixtyPercentMonth?.contingencyBufferAmount).toBeCloseTo(250, 2)
+    expect(fullSixtyPercentMonth?.moneyLeftOver).toBeCloseTo(-950, 2)
+    expect(fullSixtyPercentMonth?.shortfallAmount).toBeCloseTo(950, 2)
+    expect(result.totalContingencyBuffer).toBeCloseTo(3000, 2)
     expect(result.totalShortfall).toBeGreaterThan(0)
   })
 })

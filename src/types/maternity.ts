@@ -1,6 +1,7 @@
 export interface SalaryData {
   averageMonthlyTakeHomePay: number
   averageMonthlyCommittedSpending: number
+  contingencyBufferPercent: number
   leaveStartDate: string
 }
 
@@ -11,6 +12,7 @@ export interface CalculationResult {
   smpFloorTotal: number
   enhancedPayTotal: number
   totalShortfall: number
+  totalContingencyBuffer: number
   normalWeeklyTakeHome: number
   normalMonthlyTakeHome: number
 }
@@ -20,6 +22,8 @@ export interface MonthlyPayment {
   takeHomeAmount: number
   enhancedAmount: number
   smpFloorAmount: number
+  planningTargetAmount: number
+  contingencyBufferAmount: number
   moneyLeftOver: number
   shortfallAmount: number
   leaveDayCount: number

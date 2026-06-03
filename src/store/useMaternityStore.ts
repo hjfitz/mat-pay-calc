@@ -15,6 +15,7 @@ const STORAGE_KEY = 'maternity-pay-calculator'
 const defaultSalaryData: SalaryData = {
   averageMonthlyTakeHomePay: 3500,
   averageMonthlyCommittedSpending: 2500,
+  contingencyBufferPercent: 10,
   leaveStartDate: new Date().toISOString().slice(0, 10),
 }
 
@@ -41,16 +42,22 @@ function readStoredSalaryData(): SalaryData {
       typeof parsed.averageMonthlyCommittedSpending === 'number'
         ? parsed.averageMonthlyCommittedSpending
         : defaultSalaryData.averageMonthlyCommittedSpending
+    const contingencyBufferPercent =
+      typeof parsed.contingencyBufferPercent === 'number'
+        ? parsed.contingencyBufferPercent
+        : defaultSalaryData.contingencyBufferPercent
 
     if (
       typeof averageMonthlyTakeHomePay === 'number' &&
       Number.isFinite(averageMonthlyTakeHomePay) &&
       Number.isFinite(averageMonthlyCommittedSpending) &&
+      Number.isFinite(contingencyBufferPercent) &&
       typeof parsed.leaveStartDate === 'string'
     ) {
       return {
         averageMonthlyTakeHomePay,
         averageMonthlyCommittedSpending,
+        contingencyBufferPercent,
         leaveStartDate: parsed.leaveStartDate,
       }
     }

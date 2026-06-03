@@ -46,6 +46,8 @@ function buildMonthlyCsv(result: CalculationResult, averageMonthlyCommittedSpend
       'Rate mix',
       'Estimated take-home pay',
       'Monthly commitments',
+      'Contingency buffer',
+      'Planning target',
       'Money left over',
       'Shortfall',
       'Enhanced pay estimate',
@@ -57,6 +59,8 @@ function buildMonthlyCsv(result: CalculationResult, averageMonthlyCommittedSpend
       getRateMix(month),
       month.takeHomeAmount.toFixed(2),
       averageMonthlyCommittedSpending.toFixed(2),
+      month.contingencyBufferAmount.toFixed(2),
+      month.planningTargetAmount.toFixed(2),
       month.moneyLeftOver.toFixed(2),
       month.shortfallAmount.toFixed(2),
       month.enhancedAmount.toFixed(2),
@@ -118,8 +122,8 @@ function App() {
           <h1 id="page-title">See your take-home leave pay by month</h1>
           <p className="intro-copy">
             Enter your average monthly pay after deductions, regular monthly commitments, and
-            leave start date. The calculator derives weekly pay from your take-home figure, then
-            applies 100%, 60%, 50%, and 40% enhanced pay tiers over 52 elapsed weeks.
+            a contingency buffer. The calculator derives weekly pay from your take-home figure,
+            then applies 100%, 60%, 50%, and 40% enhanced pay tiers over 52 elapsed weeks.
           </p>
           <p className="supporting-note">
             The SMP floor is shown as an approximate displayed floor. In real payroll it is a
@@ -182,6 +186,25 @@ function App() {
             </div>
           </label>
 
+          <label>
+            <span>Contingency buffer</span>
+            <div className="percent-input">
+              <input
+                min="0"
+                step="1"
+                type="number"
+                value={salaryData.contingencyBufferPercent}
+                onChange={(event) =>
+                  setSalaryData({
+                    ...salaryData,
+                    contingencyBufferPercent: Number(event.target.value),
+                  })
+                }
+              />
+              <span aria-hidden="true">%</span>
+            </div>
+          </label>
+
           <button className="secondary-action" type="button" onClick={reset}>
             Reset
           </button>
@@ -208,8 +231,12 @@ function App() {
               <strong>{formatCurrency(calculationResult.smpFloorTotal)}</strong>
             </article>
             <article>
-              <span>Total shortfall</span>
+              <span>Recommended reserve</span>
               <strong>{formatCurrency(calculationResult.totalShortfall)}</strong>
+            </article>
+            <article>
+              <span>Contingency included</span>
+              <strong>{formatCurrency(calculationResult.totalContingencyBuffer)}</strong>
             </article>
           </section>
 
@@ -226,11 +253,11 @@ function App() {
                 </span>
                 <span>
                   <i className="key-leftover" aria-hidden="true"></i>
-                  Left over
+                  Left over after buffer
                 </span>
                 <span>
                   <i className="key-shortfall" aria-hidden="true"></i>
-                  Shortfall
+                  Shortfall after buffer
                 </span>
               </div>
             </div>
@@ -250,7 +277,7 @@ function App() {
                   </div>
                   <div
                     className={`balance-track ${month.moneyLeftOver < 0 ? 'is-shortfall' : 'is-leftover'}`}
-                    aria-label={`${month.month} ${month.moneyLeftOver < 0 ? 'shortfall' : 'left over'} ${formatPreciseCurrency(Math.abs(month.moneyLeftOver))}`}
+                    aria-label={`${month.month} ${month.moneyLeftOver < 0 ? 'shortfall after buffer' : 'left over after buffer'} ${formatPreciseCurrency(Math.abs(month.moneyLeftOver))}`}
                   >
                     <div
                       className="balance-fill"
@@ -293,7 +320,8 @@ function App() {
                 <span role="columnheader">Leave days</span>
                 <span role="columnheader">Main rate</span>
                 <span role="columnheader">Take-home pay</span>
-                <span role="columnheader">Money left over</span>
+                <span role="columnheader">Planning target</span>
+                <span role="columnheader">Left over</span>
               </div>
               {calculationResult.monthlyBreakdown.map((month) => (
                 <div className="table-row" role="row" key={month.month}>
@@ -301,6 +329,7 @@ function App() {
                   <span role="cell">{month.leaveDayCount}</span>
                   <span role="cell">{formatRate(month.dominantRate)}</span>
                   <strong role="cell">{formatPreciseCurrency(month.takeHomeAmount)}</strong>
+                  <span role="cell">{formatPreciseCurrency(month.planningTargetAmount)}</span>
                   <strong role="cell">{formatPreciseCurrency(month.moneyLeftOver)}</strong>
                 </div>
               ))}
@@ -314,7 +343,10 @@ function App() {
             </div>
             <ul>
               <li>Your pay and commitment figures stay in this browser and are not sent to a server.</li>
-              <li>Monthly commitments are assumed to stay the same throughout the leave period.</li>
+              <li>
+                Monthly commitments are assumed to stay the same, with the contingency buffer added
+                on top for the reserve calculation.
+              </li>
               <li>The employer policy is fixed at 100%, 60%, 50%, then 40% over 52 elapsed weeks.</li>
               <li>
                 Tax bands, NI, pension deductions, student loans, employer rules, and statutory rates

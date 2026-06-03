@@ -116,6 +116,28 @@ input:focus {
   border-radius: 0;
 }
 
+.percent-input {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid #a9c9cc;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.percent-input input {
+  border: 0;
+  border-radius: 0;
+}
+
+.percent-input span {
+  padding: 0 12px;
+  color: #45656b;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
 .secondary-action {
   min-height: 46px;
   border: 1px solid #83b7bd;
@@ -138,7 +160,7 @@ input:focus {
 
 .summary-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 14px;
   margin-top: 18px;
 }
@@ -354,7 +376,7 @@ input:focus {
 
 .table-row {
   display: grid;
-  grid-template-columns: 1.3fr 0.6fr 0.7fr 1fr 1fr;
+  grid-template-columns: 1.25fr 0.62fr 0.68fr 1fr 1fr 1fr;
   gap: 12px;
   align-items: center;
   min-height: 48px;
@@ -502,7 +524,7 @@ input:focus {
   }
 
   .table-row {
-    grid-template-columns: 150px 86px 80px 120px 130px;
+    grid-template-columns: 150px 86px 80px 120px 130px 120px;
     width: max-content;
     min-width: 100%;
   }

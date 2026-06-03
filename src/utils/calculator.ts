@@ -45,6 +45,11 @@ export function calculateMaternityPay(salary: SalaryData): CalculationResult {
   const leaveEndDate = addDays(startDate, TOTAL_LEAVE_WEEKS * 7 - 1)
   const normalWeeklyTakeHome = (salary.averageMonthlyTakeHomePay * 12) / 52
   const normalMonthlyTakeHome = (normalWeeklyTakeHome * 52) / 12
+  const monthlyContingencyMultiplier = 1 + salary.contingencyBufferPercent / 100
+  const planningTargetAmount =
+    salary.averageMonthlyCommittedSpending * monthlyContingencyMultiplier
+  const contingencyBufferAmount =
+    planningTargetAmount - salary.averageMonthlyCommittedSpending
 
   const weeklyBreakdown: WeeklyPayment[] = []
 
@@ -113,8 +118,10 @@ export function calculateMaternityPay(salary: SalaryData): CalculationResult {
       takeHomeAmount,
       enhancedAmount,
       smpFloorAmount,
-      moneyLeftOver: takeHomeAmount - salary.averageMonthlyCommittedSpending,
-      shortfallAmount: Math.max(0, salary.averageMonthlyCommittedSpending - takeHomeAmount),
+      planningTargetAmount,
+      contingencyBufferAmount,
+      moneyLeftOver: takeHomeAmount - planningTargetAmount,
+      shortfallAmount: Math.max(0, planningTargetAmount - takeHomeAmount),
       leaveDayCount,
       averageDailyPay: leaveDayCount > 0 ? takeHomeAmount / leaveDayCount : 0,
       dominantRate,
@@ -130,6 +137,10 @@ export function calculateMaternityPay(salary: SalaryData): CalculationResult {
     return acc + (month.takeHomeAmount - month.enhancedAmount)
   }, 0)
   const totalShortfall = monthlyBreakdown.reduce((acc, month) => acc + month.shortfallAmount, 0)
+  const totalContingencyBuffer = monthlyBreakdown.reduce(
+    (acc, month) => acc + month.contingencyBufferAmount,
+    0,
+  )
 
   return {
     monthlyBreakdown,
@@ -138,6 +149,7 @@ export function calculateMaternityPay(salary: SalaryData): CalculationResult {
     smpFloorTotal,
     enhancedPayTotal,
     totalShortfall,
+    totalContingencyBuffer,
     normalWeeklyTakeHome,
     normalMonthlyTakeHome,
   }
